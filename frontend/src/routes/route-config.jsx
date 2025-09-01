@@ -7,6 +7,7 @@ import EventDetailPage from '../pages/EventDetailPage.jsx';
 import EventLayout from '../layouts/EventLayout.jsx';
 import {eventListLoader, eventDetailLoader} from "../loader/events-loader.js";
 import eventDetailPage from "../pages/EventDetailPage.jsx";
+import NewEventPage from "../pages/NewEventPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
                         element: <EventPage/>,
                         // loader함수는 언제 실행되냐? 페이지가 라우팅될 때 트리거됨
                         loader: eventListLoader
+                    },
+                    {
+                        path: 'new',
+                        element: <NewEventPage />
                     },
                     {
                         path: ':eventId',
