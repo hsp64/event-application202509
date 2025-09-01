@@ -10,6 +10,5 @@ export const eventListLoader = async () => {
 
 export const eventDetailLoader = async ({ params }) => {
 
-
     return await fetch(`http://localhost:9000/api/events/${params.eventId}`);
 }

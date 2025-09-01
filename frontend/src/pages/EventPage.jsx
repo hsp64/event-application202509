@@ -1,6 +1,6 @@
 import React from 'react';
-import {Link, useLoaderData} from 'react-router-dom';
-import EventList from "../components/EventList.jsx";
+import {useLoaderData} from 'react-router-dom';
+import EventList from '../components/EventList.jsx';
 
 const EventPage = () => {
 
@@ -8,9 +8,7 @@ const EventPage = () => {
     const eventList = useLoaderData();
 
     return (
-        <>
-            <EventList eventList={eventList}/>
-        </>
+        <EventList eventList={eventList} />
     );
 };
 

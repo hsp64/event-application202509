@@ -10,7 +10,6 @@ const MainNavigation = () => {
                     <li>
                         <NavLink
                             to='/'
-                            end
                         >
                             Home
                         </NavLink>

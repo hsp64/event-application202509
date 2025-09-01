@@ -1,5 +1,5 @@
 import React from 'react';
-import EventForm from "../components/EventForm.jsx";
+import EventForm from '../components/EventForm.jsx';
 
 const NewEventPage = () => {
     return (

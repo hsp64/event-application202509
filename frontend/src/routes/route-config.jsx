@@ -5,9 +5,8 @@ import EventPage from '../pages/EventPage.jsx';
 import RootLayout from '../layouts/RootLayout.jsx';
 import EventDetailPage from '../pages/EventDetailPage.jsx';
 import EventLayout from '../layouts/EventLayout.jsx';
-import {eventListLoader, eventDetailLoader} from "../loader/events-loader.js";
-import eventDetailPage from "../pages/EventDetailPage.jsx";
-import NewEventPage from "../pages/NewEventPage.jsx";
+import {eventListLoader, eventDetailLoader} from '../loader/events-loader.js';
+import NewEventPage from '../pages/NewEventPage.jsx';
 
 const router = createBrowserRouter([
     {
@@ -37,7 +36,7 @@ const router = createBrowserRouter([
                         path: ':eventId',
                         element: <EventDetailPage/>,
                         loader: eventDetailLoader
-                    }
+                    },
                 ]
             },
         ]
