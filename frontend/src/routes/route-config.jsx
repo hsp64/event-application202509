@@ -3,26 +3,33 @@ import ErrorPage from '../pages/ErrorPage.jsx';
 import HomePage from '../pages/HomePage.jsx';
 import EventPage from '../pages/EventPage.jsx';
 import RootLayout from '../layouts/RootLayout.jsx';
-import EventDetailPage from "../pages/EventDetailPage.jsx";
+import EventDetailPage from '../pages/EventDetailPage.jsx';
+import EventLayout from '../layouts/EventLayout.jsx';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <RootLayout />,
-        errorElement: <ErrorPage />,
+        element: <RootLayout/>,
+        errorElement: <ErrorPage/>,
         children: [
             {
                 index: true,
-                element: <HomePage />
+                element: <HomePage/>
             },
             {
                 path: 'events',
-                element: <EventPage />
+                element: <EventLayout/>,
+                children: [
+                    {
+                        index: true,
+                        element: <EventPage/>
+                    },
+                    {
+                        path: ':eventId',
+                        element: <EventDetailPage/>
+                    }
+                ]
             },
-            {
-                path: 'events/:eventId',
-                element: <EventDetailPage />
-            }
         ]
     },
 ]);
