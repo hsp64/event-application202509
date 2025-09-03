@@ -1,9 +1,9 @@
 import {useEffect, useRef, useState} from 'react';
 import styles from './SignUpForm.module.scss';
-import {AUTH_API_URL} from "../../config/host-config.js";
+import {AUTH_API_URL} from '../../config/host-config.js';
 import { debounce } from 'lodash';
 
-const EmailInput = () => {
+const EmailInput = ({ onSuccess }) => {
 
     const emailRef = useRef();
 
@@ -25,18 +25,20 @@ const EmailInput = () => {
             setError('이메일이 올바르지 않습니다.');
             return;
         }
+
         // 이메일 중복확인 검증
         (async () => {
-            const response = await fetch(`${AUTH_API_URL}/check-email?email=${inputValue}`)
+            const response = await fetch(`${AUTH_API_URL}/check-email?email=${inputValue}`);
             const { isDuplicate, message } = await response.json();
             if (isDuplicate) {
                 setError(message);
+            } else {
+                onSuccess();
             }
         })();
 
         setError('');
     };
-
 
     return (
         <>
