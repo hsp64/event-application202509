@@ -42,9 +42,12 @@ public class AuthController {
                 "isMatch", isMatch
         ));
     }
+
     // 회원가입 마무리 요청
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody SignupRequest dto) {
+
+        log.info("save request user info - {}", dto);
 
         eventUserService.confirmSignup(dto);
 
@@ -52,4 +55,5 @@ public class AuthController {
                 "message", "회원가입이 완료되었습니다."
         ));
     }
+
 }
