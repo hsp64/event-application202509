@@ -4,12 +4,12 @@ import com.study.event.domain.dto.request.EventCreate;
 import com.study.event.domain.dto.response.EventDetailResponse;
 import com.study.event.domain.dto.response.EventResponse;
 import com.study.event.domain.entity.Event;
+import com.study.event.domain.entity.EventUser;
 import com.study.event.repository.EventRepository;
+import com.study.event.repository.EventUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final EventUserRepository eventUserRepository;
 
     // 전체 조회
     @Transactional(readOnly = true)
@@ -44,8 +45,12 @@ public class EventService {
     }
 
     // 이벤트 생성
-    public void saveEvent(EventCreate dto) {
-        eventRepository.save(dto.toEntity());
+    public void saveEvent(EventCreate dto, String email) {
+        Event event = dto.toEntity();
+        EventUser foundUser = getCurrentLoggedInUser(email);
+        event.setEventUser(foundUser);
+
+        eventRepository.save(event);
     }
 
     // 이벤트 단일 조회
@@ -68,5 +73,10 @@ public class EventService {
         event.changeEvent(dto);
 
         eventRepository.save(event);
+    }
+
+    // 로그인한 사용자의 엔터티정보를 불러오는 메서드
+    private EventUser getCurrentLoggedInUser(String email) {
+        return eventUserRepository.findByEmail(email).orElseThrow();
     }
 }
