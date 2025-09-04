@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from 'react';
 import {debounce} from 'lodash';
 import {AUTH_API_URL} from '../../config/host-config.js';
 
-const VerificationInput = ({ email }) => {
+const VerificationInput = ({ email, onSuccess }) => {
 
   // 완성된 인증코드를 상태관리
   const [codes, setCodes] = useState(['', '', '', '']);
@@ -23,8 +23,6 @@ const VerificationInput = ({ email }) => {
     inputRefs.current[index] = $input;
   };
 
-
-
   const focusNextInput = index => {
     // 인덱스 검증 - 마지막 칸에서는 포커스 이동대신 블러처리
     if (index < inputRefs.current.length) {
@@ -39,7 +37,7 @@ const VerificationInput = ({ email }) => {
   // 서버에 인증코드 전송
   const fetchVerifying = debounce(async (verifyCode) => {
     const response
-      = await fetch(`${AUTH_API_URL}/code?email=${email}&code=${verifyCode}`);
+        = await fetch(`${AUTH_API_URL}/code?email=${email}&code=${verifyCode}`);
     const {isMatch} = await response.json();
 
     // 검증에 실패했을 경우
@@ -57,6 +55,7 @@ const VerificationInput = ({ email }) => {
     }
     // 검증 성공시 - 다음 스텝으로 이동하는 신호 올려보내기
     setError('');
+    onSuccess();
 
 
   }, 1000);
@@ -70,7 +69,6 @@ const VerificationInput = ({ email }) => {
     if (inputValue !== '' && !/^\d$/.test(inputValue)) {
       return;
     }
-
 
     const copyCodes = [...codes];
     copyCodes[index] = inputValue;
@@ -105,29 +103,29 @@ const VerificationInput = ({ email }) => {
   }, []);
 
   return (
-    <>
-      <p>Step 2: 이메일로 전송된 인증번호 4자리를 입력해주세요.</p>
-      <div className={styles.codeInputContainer}>
-        {
-          Array.from(new Array(4)).map((_, index) => (
-            <input
-              ref={($input) => bindRef($input, index)}
-              key={index}
-              type='text'
-              className={styles.codeInput}
-              maxLength={1}
-              onChange={(e) => handleNumber(index, e)}
-              value={codes[index]}
-            />
-          ))
-        }
-      </div>
-      <div className={styles.timer}>
-        {`${'0' + Math.floor(timer / 60)}:${('0' + (timer % 60)).slice(-2)}`}
-      </div>
+      <>
+        <p>Step 2: 이메일로 전송된 인증번호 4자리를 입력해주세요.</p>
+        <div className={styles.codeInputContainer}>
+          {
+            Array.from(new Array(4)).map((_, index) => (
+                <input
+                    ref={($input) => bindRef($input, index)}
+                    key={index}
+                    type='text'
+                    className={styles.codeInput}
+                    maxLength={1}
+                    onChange={(e) => handleNumber(index, e)}
+                    value={codes[index]}
+                />
+            ))
+          }
+        </div>
+        <div className={styles.timer}>
+          {`${'0' + Math.floor(timer / 60)}:${('0' + (timer % 60)).slice(-2)}`}
+        </div>
 
-      {error && <p className={styles.errorMessage}>{error}</p>}
-    </>
+        {error && <p className={styles.errorMessage}>{error}</p>}
+      </>
   );
 };
 
