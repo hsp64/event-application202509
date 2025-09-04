@@ -5,7 +5,7 @@ import RootLayout from '../layouts/RootLayout.jsx';
 import EventDetailPage from '../pages/EventDetailPage.jsx';
 import EventLayout from '../layouts/EventLayout.jsx';
 import {eventDetailLoader} from '../loader/events-loader.js';
-import {deleteAction, saveAction as manipulateAction} from '../loader/events-actions.js';
+import {deleteAction, saveAction as manipulateAction, loginAction, logoutAction} from '../loader/events-actions.js';
 import NewEventPage from '../pages/NewEventPage.jsx';
 import EditPage from '../pages/EditPage.jsx';
 import HomeLayout from '../layouts/HomeLayout.jsx';
@@ -24,11 +24,21 @@ const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: <WelcomePage />
+                        element: <WelcomePage />,
+                        action: loginAction,
+                        loader: () => {
+                            const userData = JSON.parse(localStorage.getItem('userData'));
+                            console.log(userData);
+                            return userData;
+                        }
                     },
                     {
                         path: '/sign-up',
                         element: <SignUpPage />
+                    },
+                    {
+                        path: '/logout',
+                        action: logoutAction
                     }
                 ]
             },
