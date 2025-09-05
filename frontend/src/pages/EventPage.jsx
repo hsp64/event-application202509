@@ -1,6 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import EventList from '../components/EventList.jsx';
 import EventSkeleton from '../components/EventSkeleton.jsx';
+import {EVENT_API_URL} from '../config/host-config.js';
+import {getUserToken} from '../loader/events-loader.js';
+import {fetchWithAuth} from '../config/api.js';
 
 const EventPage = () => {
 
@@ -28,7 +31,7 @@ const EventPage = () => {
         // 강제로 1.5초의 로딩 부여
         await new Promise(r => setTimeout(r, 1500));
 
-        const response = await fetch(`http://localhost:9000/api/events?page=${currentPage}`);
+        const response = await fetchWithAuth(`${EVENT_API_URL}?page=${currentPage}`);
         const {hasNext, eventList: events} = await response.json();
         setEventList(prev => [...prev, ...events]);
         // 페이지번호 갱신
@@ -69,7 +72,7 @@ const EventPage = () => {
             {/* 무한스크롤 옵저버를 위한 감시대상 태그  */}
             <div ref={observerRef} style={{ height: 100 }}>
                 {/* 로딩바, 스켈레톤 폴백 배치 */}
-                {loading && <EventSkeleton />}
+                {loading && <EventSkeleton/>}
             </div>
         </>
     );
