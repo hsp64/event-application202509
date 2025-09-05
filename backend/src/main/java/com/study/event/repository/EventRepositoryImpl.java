@@ -22,7 +22,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     private final JPAQueryFactory factory;
 
     @Override
-    public Slice<Event> findEvents(Pageable pageable) {
+    public Slice<Event> findEvents(Long userId, Pageable pageable) {
 
         /*
             총 데이터 수 23개, 한번에 가져올 데이터 5개
@@ -48,17 +48,18 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         // 목록 조회
         List<Event> eventList = factory
                 .selectFrom(event)
+                .where(event.eventUser.id.eq(userId))
                 .orderBy(event.createdAt.desc())
                 .offset(pageable.getOffset())  // 몇개를 건너뛸지
                 .limit(pageable.getPageSize() + 1)  // 몇개를 조회할지
                 .fetch();
 
-        // 추가 데이터 (ex : 6번째 데이터)가 있느닞 확인할 변수
+        // 추가 데이터 (ex : 6번째 데이터)가 있는지 확인할 변수
         boolean hasNext = false;
-        //          6        >         5
+        //       6           >       5
         if (eventList.size() > pageable.getPageSize()) {
-           hasNext = true;
-           // 실제로는 5개만 리턴해야함. 6번째 데이터는 삭제
+            hasNext = true;
+            // 실제로는 5개만 리턴해야함. 6번째 데이터는 삭제
             eventList.remove(eventList.size() - 1);
         }
 
